@@ -8,14 +8,19 @@ public class Spawner : MonoBehaviour
 
     public Camera cam;
     public float depthFromCam = .301f;
+    public GameObject requinPrefab;
+    public GameObject murenePrefab;
+    public GameObject mainPrefab;
+    public GameObject medusePrefab;
+    public GameObject calmarPrefab;
     private List<FrustumBorder> frustumBorders = new List<FrustumBorder>();
     public bool debug;
     public bool debuging;
     private Queue<FrustumBorder> _InactiveBorders = new Queue<FrustumBorder>();
     private List<FrustumBorder> _ActiveBorders = new List<FrustumBorder>();
-
+public float timeBetweenSpawn = 2;
     private void Start() {
-        ComputeFrustumBorders();
+        InitiateSpawner();
     }
 
     public void Update()
@@ -27,7 +32,11 @@ public class Spawner : MonoBehaviour
                 debug = false;
                 StartCoroutine(DebugCoroutine());
             }
-            Debug.DrawLine(cam.ViewportToWorldPoint(new Vector3(.5f, .5f,depthFromCam)), spawnPos, Color.red);
+            //Debug.DrawLine(cam.ViewportToWorldPoint(new Vector3(.5f, .5f,depthFromCam)), spawnPos, Color.red);
+            foreach(FrustumBorder border in frustumBorders)
+            {
+                border.CheckSpawnedEnemies();
+            }
         }
     }
 private Vector3 spawnPos;
@@ -36,25 +45,52 @@ private Vector3 spawnPos;
         debuging = true;
         while(debuging)
         {
-            spawnPos = GetRandomSpawnPos();
-            yield return new WaitForSeconds(.5f);
+            SpawnRandomEnemy();
+            yield return new WaitForSeconds(timeBetweenSpawn);
         }
     }
 
-    private void ComputeFrustumBorders()
+    private void InitiateSpawner()
     {
+        //stock frustum borders
         Vector3 bottomLeft = new Vector3(0, 0, depthFromCam);
         Vector3 topLeft = new Vector3(0, 1, depthFromCam);
         Vector3 topRight = new Vector3(1, 1, depthFromCam);
         Vector3 bottomright = new Vector3(1, 0, depthFromCam);
         
-        FrustumBorder left = new FrustumBorder(bottomLeft, topLeft, cam);
-        FrustumBorder top = new FrustumBorder(topLeft, topRight, cam);
-        FrustumBorder right = new FrustumBorder(topRight, bottomright, cam);
-        FrustumBorder bottom = new FrustumBorder(bottomright, bottomLeft, cam); 
+        //setup enemies that can spawn at each border of the screen
+        RequinScie roquin = new RequinScie();
+        roquin.prefab = requinPrefab;
+        CalmarNouille calmar = new CalmarNouille();
+        calmar.prefab = calmarPrefab;
+        SeauMeduse meduse = new SeauMeduse();
+        meduse.prefab = medusePrefab;
+        MureneChaussette chaussette = new MureneChaussette();
+        chaussette.prefab = murenePrefab;
+        Main main = new Main();
+        main.prefab = mainPrefab;
 
+        List<Enemy> leftEnemies = new List<Enemy>();
+        leftEnemies.Add(roquin);
+        leftEnemies.Add(calmar);
+        leftEnemies.Add(chaussette);
+        List<Enemy> topEnemies = new List<Enemy>();
+        topEnemies.Add(main);
+        topEnemies.Add(calmar);
+        List<Enemy> rightEnemies = new List<Enemy>();
+        rightEnemies.Add(roquin);
+        rightEnemies.Add(calmar);
+        rightEnemies.Add(chaussette);
+        List<Enemy> bottomEnemies = new List<Enemy>();
+        bottomEnemies.Add(meduse);
+        bottomEnemies.Add(calmar);
         
-        frustumBorders = new List<FrustumBorder>();
+        //save borders paramas as a whole object
+        FrustumBorder left = new FrustumBorder(bottomLeft, topLeft, cam, leftEnemies);
+        FrustumBorder top = new FrustumBorder(topLeft, topRight, cam, topEnemies);
+        FrustumBorder right = new FrustumBorder(topRight, bottomright, cam, rightEnemies);
+        FrustumBorder bottom = new FrustumBorder(bottomright, bottomLeft, cam, bottomEnemies); 
+
         frustumBorders.Add(left);
         frustumBorders.Add(top);
         frustumBorders.Add(right);
@@ -65,22 +101,22 @@ private Vector3 spawnPos;
         _ActiveBorders.Add(bottom);
     }
 
-    public Vector3 GetRandomSpawnPos()
+    public void SpawnRandomEnemy()
     {
         if(frustumBorders.Count == 0)
         {
-            ComputeFrustumBorders();
+            InitiateSpawner();
         }
         int randIndex= Random.Range(0, _ActiveBorders.Count);
-        FrustumBorder randomBurder = _ActiveBorders[randIndex];
-        _ActiveBorders.Remove(randomBurder);
-        _InactiveBorders.Enqueue(randomBurder);
+        FrustumBorder randomBorder = _ActiveBorders[randIndex];
+        _ActiveBorders.Remove(randomBorder);
+        _InactiveBorders.Enqueue(randomBorder);
         if(_InactiveBorders.Count > 2)
         {
             _ActiveBorders.Add(_InactiveBorders.Dequeue());
         }
 
-        return randomBurder.GetRandomSpawnPoint(depthFromCam);
+        randomBorder.Spawn(depthFromCam);
     }
 
     public class FrustumBorder
@@ -89,6 +125,7 @@ private Vector3 spawnPos;
 
         public Vector3 start;
         public Vector3 end;
+        public List<Enemy> possibleEnemies = new List<Enemy>(); 
 
         public Vector3 worldStart
         {
@@ -101,12 +138,14 @@ private Vector3 spawnPos;
         private int _LastSpawn; 
 
         private Camera cam;
+        private List<Transform> _SpawnedEnemies = new List<Transform>();
 
-        public FrustumBorder(Vector3 start, Vector3 end, Camera cam)
+        public FrustumBorder(Vector3 start, Vector3 end, Camera cam, List<Enemy> enemies)
         {
             this.start = start;
             this.end = end;
             this.cam = cam;
+            this.possibleEnemies = enemies;
         }
 
         public Vector3 GetRandomSpawnPoint(float depthFromCam)
@@ -138,6 +177,33 @@ private Vector3 spawnPos;
             Vector3 pos = (end - start).normalized * posOnBorder + start;
             pos.z = depthFromCam;
             return cam.ViewportToWorldPoint(pos);
+        }
+
+        public void Spawn(float depthFromCam)
+        {
+            Vector3 spawnPos = GetRandomSpawnPoint(depthFromCam);
+            Vector3 spawnForward = cam.ViewportToWorldPoint(new Vector3(.5f, .5f, depthFromCam)) - spawnPos;
+            int randomEnemy = Random.Range(0, possibleEnemies.Count);
+            possibleEnemies[randomEnemy].Instantiate(spawnPos, spawnForward);
+        }
+
+        public void CheckSpawnedEnemies()
+        {
+            List<Transform> toDelete = new List<Transform>();
+            foreach(Transform enemy in _SpawnedEnemies)
+            {
+                Vector3 eh = cam.WorldToViewportPoint(enemy.position);
+                bool enemyInScreen = eh.x > 0 && eh.y > 0 && eh.x < 1 && eh.y < 1; 
+                if(!enemyInScreen)
+                {
+                    toDelete.Add(enemy);
+                }
+            }
+
+            foreach(Transform item in toDelete)
+            {
+                GameObject.Destroy(item);
+            }
         }
     }
 
