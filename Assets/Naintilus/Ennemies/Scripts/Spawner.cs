@@ -80,7 +80,7 @@ private Vector3 spawnPos;
             _ActiveBorders.Add(_InactiveBorders.Dequeue());
         }
 
-        return randomBurder.GetRandomSpawnPoint();
+        return randomBurder.GetRandomSpawnPoint(depthFromCam);
     }
 
     public class FrustumBorder
@@ -109,7 +109,7 @@ private Vector3 spawnPos;
             this.cam = cam;
         }
 
-        public Vector3 GetRandomSpawnPoint()
+        public Vector3 GetRandomSpawnPoint(float depthFromCam)
         {
             float margin = .1f;
             float posOnBorder = Random.Range(0 + margin, .66f - margin);
@@ -136,6 +136,7 @@ private Vector3 spawnPos;
             }
 
             Vector3 pos = (end - start).normalized * posOnBorder + start;
+            pos.z = depthFromCam;
             return cam.ViewportToWorldPoint(pos);
         }
     }
