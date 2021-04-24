@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4653054606086181761}
   - component: {fileID: 7909870868426217203}
   - component: {fileID: 2043882852562748569}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: roquin
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -27,7 +27,7 @@ Transform:
   m_GameObject: {fileID: 4487530460501295326}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.024275541, y: 1.1677918, z: -7.528879}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
   m_Children:
   - {fileID: 4512396553033808320}
   m_Father: {fileID: 0}
@@ -78,7 +78,7 @@ GameObject:
   - component: {fileID: 4898172575278695794}
   - component: {fileID: 3085486066089831769}
   - component: {fileID: 5600220124815442393}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}

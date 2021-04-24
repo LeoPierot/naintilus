@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 6461537564962987692}
   - component: {fileID: 8452960860066787127}
   - component: {fileID: 5968220611151824526}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cube (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -107,7 +107,7 @@ GameObject:
   - component: {fileID: 4186412571421062790}
   - component: {fileID: 5975862962815438007}
   - component: {fileID: 8533579478621366559}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cube (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -202,7 +202,7 @@ GameObject:
   - component: {fileID: 6771963258729364939}
   - component: {fileID: 8168541270036047807}
   - component: {fileID: 1633033980232590843}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cube (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -294,7 +294,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4876366491328539836}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: GameObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -332,7 +332,7 @@ GameObject:
   - component: {fileID: 7008213756951005931}
   - component: {fileID: 970080585697463272}
   - component: {fileID: 6510010410994249480}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -427,7 +427,7 @@ GameObject:
   - component: {fileID: 918442405902659732}
   - component: {fileID: 6122151363181369096}
   - component: {fileID: 1506637201206430612}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cube (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -521,7 +521,7 @@ GameObject:
   - component: {fileID: 8595747558297167074}
   - component: {fileID: 1343370772202888664}
   - component: {fileID: 6490310761792773853}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: meduse
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -537,7 +537,7 @@ Transform:
   m_GameObject: {fileID: 6601388456032917733}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.024275541, y: 1.1677918, z: -7.528879}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
   m_Children:
   - {fileID: 4876366491328539836}
   m_Father: {fileID: 0}

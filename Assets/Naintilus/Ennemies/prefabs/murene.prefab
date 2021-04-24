@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 4990704768909367178}
   - component: {fileID: 854461521388729577}
   - component: {fileID: 5859950174733412485}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cylinder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -107,7 +107,7 @@ GameObject:
   - component: {fileID: 6049416705229871399}
   - component: {fileID: 9114529007862798329}
   - component: {fileID: -5313181929524347577}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: murene
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -123,7 +123,7 @@ Transform:
   m_GameObject: {fileID: 3539623070018450370}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.024275541, y: 1.1677918, z: -7.528879}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
   m_Children:
   - {fileID: 582172357817811112}
   m_Father: {fileID: 0}

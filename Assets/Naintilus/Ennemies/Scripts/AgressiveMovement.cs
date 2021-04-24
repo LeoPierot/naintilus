@@ -22,14 +22,6 @@ public class AgressiveMovement : MonoBehaviour
         StartCoroutine(MovementCoroutine());
     }
 
-    private void Update() {
-        if(!player)
-        {
-            player = GameObject.FindGameObjectWithTag("Player").transform;
-        }
-
-    }
-
     private IEnumerator MovementCoroutine()
     {
         yield return MoveTowardPlayer();
@@ -66,5 +58,6 @@ public class AgressiveMovement : MonoBehaviour
 
     private void OnCollisionEnter(Collision other) {
         //EXPLOSION
+        GameObject.Destroy(this.gameObject);
     }
 }
