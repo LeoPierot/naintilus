@@ -59,6 +59,7 @@ public class AgressiveMovement : MonoBehaviour
 
     private void OnTriggerEnter(Collider other) {
         //EXPLOSION
+            Debug.Log("eh?");
         if(other.tag == "Player")
         {
             rb.velocity = Vector3.zero;
