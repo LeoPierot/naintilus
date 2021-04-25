@@ -24,13 +24,25 @@ public class MainMovement : MonoBehaviour
     private IEnumerator MovementCoroutine()
     {
         yield return new WaitForSeconds(anticipationTime);
+        float margin = .2f;
         rb.velocity = inSpeed * transform.forward;
-        while(ViewportPos.x > 0 && ViewportPos.y > 0 && ViewportPos.x < 1 && ViewportPos.y < 1)
+        while(ViewportPos.x > 0-margin && ViewportPos.y > 0-margin && ViewportPos.x < 1+margin && ViewportPos.y < 1+margin)
         {
             yield return null;
         }
         rb.velocity = Vector3.zero;
         yield return new WaitForSeconds(inFrameTime);
         rb.velocity = outSpeed * -transform.forward;
+    }
+
+    private void OnTriggerEnter(Collider other) {
+        //EXPLOSION
+        if(other.tag == "Player")
+        {
+            other.GetComponent<Player>().TakeDamage(transform.forward);
+        }
+        else{
+            Destroy(other.gameObject);
+        }
     }
 }

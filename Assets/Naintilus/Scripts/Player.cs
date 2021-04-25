@@ -7,10 +7,15 @@ public class Player : MonoBehaviour
 {
     // nombre de vies max
     // nombre de vies actuel
-    // durée de l'invincibilité
-    // fréquence de tir
-    // (dégâts tir ?)
-    // vélocité max
+    // durï¿½e de l'invincibilitï¿½
+    // frï¿½quence de tir
+    // (dï¿½gï¿½ts tir ?)
+    // vï¿½locitï¿½ max
+
+    private enum PLAYER_STATE
+    {
+        FINE, GETTIN_SMASHED
+    }
 
     [Header("External Components")]
     [SerializeField] private Camera _cam = default;
@@ -25,6 +30,7 @@ public class Player : MonoBehaviour
     [SerializeField] private ParticleSystem _bubblePS = default;
 
     private Rigidbody _rigidbody;
+    private PLAYER_STATE _State;
 
     private void Awake()
     {
@@ -57,10 +63,46 @@ public class Player : MonoBehaviour
 
         _rigidbody.AddForce(Vector3.down * _verticalDrag);
 
-        if (_rigidbody.velocity.magnitude >= _maxVelocity)
+        if (_rigidbody.velocity.magnitude >= _maxVelocity && Vector3.Dot(_rigidbody.velocity, Vector3.down) > .4f)
         {
             _rigidbody.velocity = _rigidbody.velocity.normalized * _maxVelocity;
         }
+    }
+
+    public void TakeDamage(Vector3 force){
+        //take dmg
+        StartCoroutine(GETSMASHED(force));
+    }
+
+    private IEnumerator GETSMASHED(Vector3 force)
+    {
+        _State = PLAYER_STATE.GETTIN_SMASHED;
+        _rigidbody.velocity = Vector3.zero;
+        yield return new WaitForSeconds(.2f);
+
+        _cam.GetComponent<PlayerCam>().enabled = false;
+        _rigidbody.isKinematic = true;
+        yield return LerpPosition(transform.position, transform.position + force * 20, .75f);
+        yield return new WaitForSeconds(1f);
+
+        _rigidbody.isKinematic = false;
+        _rigidbody.velocity = Vector3.zero;
+        transform.position = _cam.ViewportToWorldPoint(new Vector3(.5f, .5f, 9));
+        _cam.GetComponent<PlayerCam>().enabled = true;
+    }
+
+    private IEnumerator LerpPosition(Vector3 start, Vector3 end, float time)
+    {
+        float countdown = 0;
+        float interpolator = 0;
+        while(interpolator < 1)
+        {
+            transform.position = Vector3.Lerp(start, end, interpolator);
+            countdown += Time.fixedDeltaTime;
+            interpolator = countdown/time;
+            yield return null;
+        }
+        transform.position = end;
     }
 
     private void RotateArm()

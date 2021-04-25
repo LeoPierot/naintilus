@@ -43,6 +43,7 @@ public class AgressiveMovement : MonoBehaviour
         //play sfx
         //display exclamation mark
         transform.forward = (player.position - transform.position).normalized;
+        rb.velocity = Vector3.zero;
         yield return new WaitForSeconds(reactionTime);
     }
 
@@ -56,8 +57,14 @@ public class AgressiveMovement : MonoBehaviour
         }
     }
 
-    private void OnCollisionEnter(Collision other) {
+    private void OnTriggerEnter(Collider other) {
         //EXPLOSION
-        GameObject.Destroy(this.gameObject);
+        if(other.tag == "Player")
+        {
+            rb.velocity = Vector3.zero;
+            float forwardFactor = 1-((Vector3.Dot(transform.forward, Vector3.down) + 1)/2);
+            other.GetComponent<Player>().TakeDamage(transform.forward);
+            GameObject.Destroy(this.gameObject);
+        }
     }
 }
