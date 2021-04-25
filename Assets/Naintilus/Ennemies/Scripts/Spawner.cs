@@ -19,8 +19,6 @@ public class Spawner : MonoBehaviour
     public float levelDuration = 60;
     private float countdown;
     private List<FrustumBorder> frustumBorders = new List<FrustumBorder>();
-    public bool debug;
-    public bool debuging;
     private Queue<FrustumBorder> _InactiveBorders = new Queue<FrustumBorder>();
     private List<FrustumBorder> _ActiveBorders = new List<FrustumBorder>();
     private Rigidbody _PlayerRb;
@@ -52,7 +50,6 @@ private Vector3 spawnPos;
     {
         while(countdown < levelDuration)
         {
-            Debug.Log(timeBetweenSpawn);
             yield return new WaitForSeconds(timeBetweenSpawn);
             SpawnRandomEnemy();
         }
