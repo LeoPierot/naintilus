@@ -14,6 +14,7 @@ public class Player : MonoBehaviour
     [Header("External Components")]
     [SerializeField] private Camera _cam = default;
     [SerializeField] private Transform _armPivot = default;
+    [SerializeField] private Transform _alternativeArmPivot = default;
     [Header("Movement Settings")]
     [SerializeField] private float _bubblePushForce = 3.0f;
     [SerializeField] private float _defaultMaxVelocity = 3.5f;
@@ -42,7 +43,7 @@ public class Player : MonoBehaviour
     private GameObject _torpedosHolder = null;
     private PLAYER_STATE _state;
 
-    private Vector3 FiringDirection => new Vector3(_armPivot.up.x, _armPivot.up.y, 0.0f);
+    private Vector3 FiringDirection => new Vector3(_armPivot.right.x, _armPivot.right.y, 0.0f);
 
     private void Awake()
     {
@@ -167,9 +168,18 @@ public class Player : MonoBehaviour
 
         Vector3 mouseWorldPos = _cam.ScreenToWorldPoint(new Vector3(mouseScreenPos.x, mouseScreenPos.y, -(_cam.transform.position - _armPivot.position).z));
         Vector3 mouseDirection = mouseWorldPos - _armPivot.position;
-        mouseDirection.Normalize();
+        if(Vector3.Dot(mouseDirection.normalized, Vector3.right)>0)
+        {
+            _alternativeArmPivot.localEulerAngles = new Vector3(0, 0, 0);
+        }
+        else{
+            _alternativeArmPivot.localEulerAngles = new Vector3(180, 0, 0); 
+        }
+        _armPivot.right = mouseDirection;
 
-        _armPivot.up = mouseDirection;
+        //mouseDirection.Normalize();
+
+        //_armPivot.up = mouseDirection;
     }
 
     private void FireBubble()
@@ -192,7 +202,7 @@ public class Player : MonoBehaviour
 
     private void ApplyBubbleForce(out Vector3 bubbleForceDirection)
     {
-        bubbleForceDirection = new Vector3(_armPivot.up.x, _armPivot.up.y, 0.0f).normalized;
+        bubbleForceDirection = new Vector3(_armPivot.right.x, _armPivot.right.y, 0.0f).normalized;
         bubbleForceDirection *= -1f;
 
         _rigidbody.AddForce(bubbleForceDirection * _bubblePushForce);
