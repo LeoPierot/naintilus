@@ -432,7 +432,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inSpeed: 100
   outSpeed: 20
-  anticipationTime: 0.5
+  anticipationTime: 1
   inFrameTime: 1
 --- !u!54 &3801877872042133486
 Rigidbody:

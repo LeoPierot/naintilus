@@ -70,11 +70,7 @@ public class Player : MonoBehaviour
         {
             ApplyBubbleForce(out _bubbleForceDirection);
 
-            if (Vector3.Dot(Vector3.up, _bubbleForceDirection) > 0.05f)
-            {
-                _rigidbody.AddForce(Vector3.down * _verticalDrag);
-            }
-            else if(Vector3.Dot(Vector3.down, _bubbleForceDirection) > 0.95f)
+            if(Vector3.Dot(Vector3.down, _bubbleForceDirection) > .5f)
             {
                 maxVelocity *= _divingVelocityModifier;
             }

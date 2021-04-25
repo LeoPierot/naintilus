@@ -588,11 +588,11 @@ PrefabInstance:
       objectReference: {fileID: 3104333343759635706, guid: 46b4f9fd5a4af8f45a8be938de2993ac, type: 3}
     - target: {fileID: 8808125569865970549, guid: f55bd3e46c6a79e47a46cc613948f31e, type: 3}
       propertyPath: _verticalDrag
-      value: 6.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8808125569865970549, guid: f55bd3e46c6a79e47a46cc613948f31e, type: 3}
       propertyPath: _bubblePushForce
-      value: 7.5
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 8808125569865970549, guid: f55bd3e46c6a79e47a46cc613948f31e, type: 3}
       propertyPath: _crossHairCursor
@@ -600,7 +600,7 @@ PrefabInstance:
       objectReference: {fileID: 2800000, guid: 8f4c6517ef87b054bade791fe62821b8, type: 3}
     - target: {fileID: 8808125569865970549, guid: f55bd3e46c6a79e47a46cc613948f31e, type: 3}
       propertyPath: _defaultMaxVelocity
-      value: 3
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 8808125569865970549, guid: f55bd3e46c6a79e47a46cc613948f31e, type: 3}
       propertyPath: _maxHorizontalDelta
@@ -616,7 +616,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8808125569865970549, guid: f55bd3e46c6a79e47a46cc613948f31e, type: 3}
       propertyPath: _divingVelocityModifier
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8808125569865970549, guid: f55bd3e46c6a79e47a46cc613948f31e, type: 3}
       propertyPath: _velocitySmoothDuration
