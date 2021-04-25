@@ -1,4 +1,5 @@
 using System.Collections;
+using UnityEngine.VFX;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -21,7 +22,7 @@ public class Player : MonoBehaviour
     [Header("BubbleGun Settings")]
     [SerializeField] private Texture2D _crossHairCursor = default;
     [SerializeField] private Transform _canonOrigin = default;
-    [SerializeField] private GameObject _bubblePrefab = default;
+    [SerializeField] private VisualEffect _bubbleVFX = default;
     [SerializeField] private float _bubbleFireRate = 0.1f;
     [SerializeField] private GameObject _torpedoPrefab = default;
     [SerializeField] private float _torpedoFireRate = 0.1f;
@@ -63,13 +64,14 @@ public class Player : MonoBehaviour
     {
         RotateArm();
 
-        if(Input.GetMouseButton(0))
+        if(Input.GetMouseButtonDown(0))
         {
             FireBubble();
             _isFiringBubbles = true;
         }
-        else
+        else if (Input.GetMouseButtonUp(0))
         {
+            _bubbleVFX.SendEvent("StopMotion");
             _isFiringBubbles = false;
         }
 
@@ -172,17 +174,7 @@ public class Player : MonoBehaviour
 
     private void FireBubble()
     {        
-        if(Time.time >= _nextBubbleTime)
-        {
-            var bubbleInstance = Instantiate(_bubblePrefab, _canonOrigin.position, Quaternion.identity);
-            bubbleInstance.transform.SetParent(_bubblesHolder.transform);
-            bubbleInstance.transform.localScale = bubbleInstance.transform.localScale * Random.Range(0.6f, 1f);
-            bubbleInstance.GetComponent<Projectile>().SetForward(FiringDirection);
-
-            _nextBubbleTime = Time.time + 1.0f / _bubbleFireRate;
-
-            Debug.Log("Fire bubble");
-        }   
+          _bubbleVFX.SendEvent("StartMotion");
     }
 
     private void FireTorpedo()

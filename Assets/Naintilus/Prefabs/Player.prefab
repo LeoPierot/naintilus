@@ -266,7 +266,7 @@ MonoBehaviour:
   _maxHorizontalDelta: 8
   _crossHairCursor: {fileID: 0}
   _canonOrigin: {fileID: 0}
-  _bubblePrefab: {fileID: 0}
+  _bubbleVFX: {fileID: 0}
   _bubbleFireRate: 0.1
   _torpedoPrefab: {fileID: 0}
   _torpedoFireRate: 0.1
