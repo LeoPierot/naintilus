@@ -26,6 +26,11 @@ public class Player : MonoBehaviour
     [SerializeField] private GameObject _torpedoPrefab = default;
     [SerializeField] private float _torpedoFireRate = 0.1f;
 
+    [SerializeField] private float invulnerabilityTime = .5f;
+    [SerializeField] private GameObject invulnerabilityBubble;
+    [SerializeField] private Material invulnerabilityMat;
+    [SerializeField] private Collider playerCollider;
+
     private Rigidbody _rigidbody;
 
     private bool _isFiringBubbles = false;
@@ -96,13 +101,12 @@ public class Player : MonoBehaviour
     
     public void TakeDamage(Vector3 force){
         //take dmg
-        Debug.Log("what");
         StartCoroutine(GETSMASHED(force));
     }
 
     private IEnumerator GETSMASHED(Vector3 force)
     {
-        _State = PLAYER_STATE.GETTIN_SMASHED;
+        _state = PLAYER_STATE.GETTIN_SMASHED;
         _rigidbody.velocity = Vector3.zero;
         yield return new WaitForSeconds(.2f);
 
@@ -111,10 +115,7 @@ public class Player : MonoBehaviour
         yield return LerpPosition(transform.position, transform.position + force * 20, .75f);
         yield return new WaitForSeconds(1f);
 
-        _rigidbody.isKinematic = false;
-        _rigidbody.velocity = Vector3.zero;
-        transform.position = _cam.ViewportToWorldPoint(new Vector3(.5f, .5f, 9));
-        _cam.GetComponent<PlayerCam>().enabled = true;
+        yield return Respawn();
     }
 
     private IEnumerator LerpPosition(Vector3 start, Vector3 end, float time)
@@ -129,6 +130,33 @@ public class Player : MonoBehaviour
             yield return null;
         }
         transform.position = end;
+    }
+
+    private IEnumerator Respawn()
+    {
+        _rigidbody.isKinematic = false;
+        _rigidbody.velocity = Vector3.zero;
+        transform.position = _cam.ViewportToWorldPoint(new Vector3(.5f, .5f, 9));
+        _cam.GetComponent<PlayerCam>().enabled = true;
+        playerCollider.enabled = false;
+        yield return InvulnerabilityFeedback();
+        playerCollider.enabled = true;
+        
+        
+    }
+
+    private IEnumerator InvulnerabilityFeedback()
+    {
+        invulnerabilityBubble.SetActive(true);
+        float countdown = 0;
+        invulnerabilityMat.SetFloat("_Dissolve", 0);
+        while(countdown < invulnerabilityTime)
+        {
+            invulnerabilityMat.SetFloat("_Dissolve", Mathf.Lerp(0, 1, countdown/invulnerabilityTime));
+            countdown += Time.deltaTime;
+            yield return null;
+        }
+        invulnerabilityBubble.SetActive(false);
     }
 
     private void RotateArm()
