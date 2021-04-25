@@ -123,6 +123,11 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!4 &128409318 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8808125570161990442, guid: f55bd3e46c6a79e47a46cc613948f31e, type: 3}
+  m_PrefabInstance: {fileID: 8808125568520801575}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1074797934
 GameObject:
   m_ObjectHideFlags: 0
@@ -151,7 +156,7 @@ Light:
   serializedVersion: 10
   m_Type: 1
   m_Shape: 0
-  m_Color: {r: 0.8773585, g: 0.8773585, b: 0.8773585, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Intensity: 1
   m_Range: 10
   m_SpotAngle: 30
@@ -476,8 +481,64 @@ PrefabInstance:
       propertyPath: _cam
       value: 
       objectReference: {fileID: 1742482711}
+    - target: {fileID: 8808125569865970549, guid: f55bd3e46c6a79e47a46cc613948f31e, type: 3}
+      propertyPath: _fireRate
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8808125569865970549, guid: f55bd3e46c6a79e47a46cc613948f31e, type: 3}
+      propertyPath: _maxVelocity
+      value: 6.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8808125569865970549, guid: f55bd3e46c6a79e47a46cc613948f31e, type: 3}
+      propertyPath: _bubbleOrigin
+      value: 
+      objectReference: {fileID: 128409318}
+    - target: {fileID: 8808125569865970549, guid: f55bd3e46c6a79e47a46cc613948f31e, type: 3}
+      propertyPath: _bubblePrefab
+      value: 
+      objectReference: {fileID: 3104333343759635706, guid: 46b4f9fd5a4af8f45a8be938de2993ac, type: 3}
+    - target: {fileID: 8808125569865970549, guid: f55bd3e46c6a79e47a46cc613948f31e, type: 3}
+      propertyPath: _verticalDrag
+      value: 6.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8808125569865970549, guid: f55bd3e46c6a79e47a46cc613948f31e, type: 3}
+      propertyPath: _bubblePushForce
+      value: 7.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8808125569865970549, guid: f55bd3e46c6a79e47a46cc613948f31e, type: 3}
+      propertyPath: _crossHairCursor
+      value: 
+      objectReference: {fileID: 2800000, guid: 8f4c6517ef87b054bade791fe62821b8, type: 3}
+    - target: {fileID: 8808125569865970549, guid: f55bd3e46c6a79e47a46cc613948f31e, type: 3}
+      propertyPath: _defaultMaxVelocity
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8808125569865970549, guid: f55bd3e46c6a79e47a46cc613948f31e, type: 3}
+      propertyPath: _maxHorizontalDelta
+      value: 7.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8808125569865970549, guid: f55bd3e46c6a79e47a46cc613948f31e, type: 3}
+      propertyPath: _velocitySmoothTime
+      value: 0.02
+      objectReference: {fileID: 0}
+    - target: {fileID: 8808125569865970549, guid: f55bd3e46c6a79e47a46cc613948f31e, type: 3}
+      propertyPath: _velocityLerpDuration
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8808125569865970549, guid: f55bd3e46c6a79e47a46cc613948f31e, type: 3}
+      propertyPath: _divingVelocityModifier
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8808125569865970549, guid: f55bd3e46c6a79e47a46cc613948f31e, type: 3}
+      propertyPath: _velocitySmoothDuration
+      value: 0.4
+      objectReference: {fileID: 0}
     - target: {fileID: 8808125569865970550, guid: f55bd3e46c6a79e47a46cc613948f31e, type: 3}
       propertyPath: m_Name
+      value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 8808125569865970550, guid: f55bd3e46c6a79e47a46cc613948f31e, type: 3}
+      propertyPath: m_TagString
       value: Player
       objectReference: {fileID: 0}
     m_RemovedComponents: []
