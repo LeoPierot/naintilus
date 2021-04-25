@@ -406,7 +406,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1
   m_VolumeTrigger: {fileID: 0}
-  m_RenderPostProcessing: 0
+  m_RenderPostProcessing: 1
   m_Antialiasing: 0
   m_AntialiasingQuality: 2
   m_StopNaN: 0
@@ -429,7 +429,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _target: {fileID: 1347599956}
-  _smoothTime: 0.125
+  _smoothFactorX: 0.0625
+  _smoothFactorY: 0.125
+  _maxAngleX: 1
+  _maxAngleY: 3
 --- !u!1001 &696560171801831471
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -563,6 +566,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8808125569865970548, guid: f55bd3e46c6a79e47a46cc613948f31e, type: 3}
+      propertyPath: m_UseGravity
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8808125569865970548, guid: f55bd3e46c6a79e47a46cc613948f31e, type: 3}
       propertyPath: m_Constraints
       value: 120
       objectReference: {fileID: 0}
@@ -575,6 +582,10 @@ PrefabInstance:
       value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 8808125569865970549, guid: f55bd3e46c6a79e47a46cc613948f31e, type: 3}
+      propertyPath: _canonOrigin
+      value: 
+      objectReference: {fileID: 128409318}
+    - target: {fileID: 8808125569865970549, guid: f55bd3e46c6a79e47a46cc613948f31e, type: 3}
       propertyPath: _maxVelocity
       value: 6.5
       objectReference: {fileID: 0}
@@ -585,10 +596,18 @@ PrefabInstance:
     - target: {fileID: 8808125569865970549, guid: f55bd3e46c6a79e47a46cc613948f31e, type: 3}
       propertyPath: _bubblePrefab
       value: 
-      objectReference: {fileID: 3104333343759635706, guid: 46b4f9fd5a4af8f45a8be938de2993ac, type: 3}
+      objectReference: {fileID: 1674386253867061586, guid: e880c06d01008a84c89a14bbb41ba026, type: 3}
     - target: {fileID: 8808125569865970549, guid: f55bd3e46c6a79e47a46cc613948f31e, type: 3}
       propertyPath: _verticalDrag
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8808125569865970549, guid: f55bd3e46c6a79e47a46cc613948f31e, type: 3}
+      propertyPath: _torpedoPrefab
+      value: 
+      objectReference: {fileID: 5103383904767876573, guid: 152a9941bb2b66d4c8524c9420da7b96, type: 3}
+    - target: {fileID: 8808125569865970549, guid: f55bd3e46c6a79e47a46cc613948f31e, type: 3}
+      propertyPath: _bubbleFireRate
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 8808125569865970549, guid: f55bd3e46c6a79e47a46cc613948f31e, type: 3}
       propertyPath: _bubblePushForce
@@ -598,6 +617,10 @@ PrefabInstance:
       propertyPath: _crossHairCursor
       value: 
       objectReference: {fileID: 2800000, guid: 8f4c6517ef87b054bade791fe62821b8, type: 3}
+    - target: {fileID: 8808125569865970549, guid: f55bd3e46c6a79e47a46cc613948f31e, type: 3}
+      propertyPath: _torpedoFireRate
+      value: 1.2
+      objectReference: {fileID: 0}
     - target: {fileID: 8808125569865970549, guid: f55bd3e46c6a79e47a46cc613948f31e, type: 3}
       propertyPath: _defaultMaxVelocity
       value: 5
