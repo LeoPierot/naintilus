@@ -39,7 +39,7 @@ public class Player : MonoBehaviour
     private Vector3 _bubbleForceDirection = Vector3.zero;
     private GameObject _bubblesHolder = null;
     private GameObject _torpedosHolder = null;
-    private PLAYER_STATE _State;
+    private PLAYER_STATE _state;
 
     private Vector3 FiringDirection => new Vector3(_armPivot.up.x, _armPivot.up.y, 0.0f);
 
