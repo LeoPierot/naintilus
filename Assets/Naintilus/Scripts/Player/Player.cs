@@ -15,16 +15,17 @@ public class Player : MonoBehaviour
     [SerializeField] private Transform _armPivot = default;
     [Header("Movement Settings")]
     [SerializeField] private float _bubblePushForce = 3.0f;
-    [SerializeField] private float _verticalDrag = 2.0f;
     [SerializeField] private float _defaultMaxVelocity = 3.5f;
     [SerializeField] private float _divingVelocityModifier = 2.0f;
-    [SerializeField] private float _velocityLerpDuration = 1.5f;
     [SerializeField] private float _maxHorizontalDelta = 8.5f;
     [Header("BubbleGun Settings")]
     [SerializeField] private Texture2D _crossHairCursor = default;
-    [SerializeField] private Transform _bubbleOrigin = default;
+    [SerializeField] private Transform _canonOrigin = default;
     [SerializeField] private GameObject _bubblePrefab = default;
-    [SerializeField] private float _fireRate = 0.1f;
+    [SerializeField] private float _bubbleFireRate = 0.1f;
+    [SerializeField] private GameObject _torpedoPrefab = default;
+    [SerializeField] private float _torpedoFireRate = 0.1f;
+
     [SerializeField] private float invulnerabilityTime = .5f;
     [SerializeField] private GameObject invulnerabilityBubble;
     [SerializeField] private Material invulnerabilityMat;
@@ -32,12 +33,15 @@ public class Player : MonoBehaviour
 
     private Rigidbody _rigidbody;
 
-    private bool _isFiring = false;
-    private float _nextFiringTime = 0.0f;
+    private bool _isFiringBubbles = false;
+    private float _nextBubbleTime = 0.0f;
+    private float _nextTorpedoTime = 0.0f;
     private Vector3 _bubbleForceDirection = Vector3.zero;
-    private Coroutine _lerpVelocityCoroutine = null;
     private GameObject _bubblesHolder = null;
-    private PLAYER_STATE _state;
+    private GameObject _torpedosHolder = null;
+    private PLAYER_STATE _State;
+
+    private Vector3 FiringDirection => new Vector3(_armPivot.up.x, _armPivot.up.y, 0.0f);
 
     private void Awake()
     {
@@ -47,8 +51,12 @@ public class Player : MonoBehaviour
     private void Start()
     {
         Cursor.SetCursor(_crossHairCursor, Vector2.zero, CursorMode.Auto);
+
         _bubblesHolder = new GameObject("Bubbles");
         _bubblesHolder.transform.position = Vector3.zero;
+        
+        _torpedosHolder = new GameObject("Torpedos");
+        _torpedosHolder.transform.position = Vector3.zero;
     }
 
     private void Update()
@@ -57,12 +65,17 @@ public class Player : MonoBehaviour
 
         if(Input.GetMouseButton(0))
         {
-            Fire();
-            _isFiring = true;
+            FireBubble();
+            _isFiringBubbles = true;
         }
         else
         {
-            _isFiring = false;
+            _isFiringBubbles = false;
+        }
+
+        if(Input.GetMouseButton(1))
+        {
+            FireTorpedo();
         }
     }
 
@@ -70,13 +83,13 @@ public class Player : MonoBehaviour
     {
         float maxVelocity = _defaultMaxVelocity;
 
-        if (_isFiring)
+        if (_isFiringBubbles)
         {
             ApplyBubbleForce(out _bubbleForceDirection);
 
             if(Vector3.Dot(Vector3.down, _bubbleForceDirection) > .5f)
             {
-                maxVelocity *= _divingVelocityModifier;
+                maxVelocity *= _divingVelocityModifier * Vector3.Dot(Vector3.down, _bubbleForceDirection);
             }
         }
 
@@ -157,19 +170,32 @@ public class Player : MonoBehaviour
         _armPivot.up = mouseDirection;
     }
 
-    private void Fire()
-    {
-        var firingDirection = new Vector3(_armPivot.up.x, _armPivot.up.y, 0.0f);
-        
-        if(Time.time >= _nextFiringTime)
+    private void FireBubble()
+    {        
+        if(Time.time >= _nextBubbleTime)
         {
-            var bubbleInstance = Instantiate(_bubblePrefab, _bubbleOrigin.position, Quaternion.identity);
-            bubbleInstance.transform.right = firingDirection;
+            var bubbleInstance = Instantiate(_bubblePrefab, _canonOrigin.position, Quaternion.identity);
             bubbleInstance.transform.SetParent(_bubblesHolder.transform);
+            bubbleInstance.transform.localScale = bubbleInstance.transform.localScale * Random.Range(0.6f, 1f);
+            bubbleInstance.GetComponent<Projectile>().SetForward(FiringDirection);
 
-            _nextFiringTime = Time.time + 1.0f / _fireRate;
+            _nextBubbleTime = Time.time + 1.0f / _bubbleFireRate;
+
+            Debug.Log("Fire bubble");
+        }   
+    }
+
+    private void FireTorpedo()
+    {
+        if(Time.time >= _nextTorpedoTime)
+        {
+            var torpedoInstance = Instantiate(_torpedoPrefab, _canonOrigin.position, Quaternion.identity);
+            torpedoInstance.transform.SetParent(_torpedosHolder.transform);
+            torpedoInstance.transform.right = FiringDirection;
+            torpedoInstance.GetComponent<Projectile>().SetForward(FiringDirection);
+
+            _nextTorpedoTime = Time.time + 1.0f / _torpedoFireRate;
         }
-        
     }
 
     private void ApplyBubbleForce(out Vector3 bubbleForceDirection)
@@ -195,36 +221,7 @@ public class Player : MonoBehaviour
     {
         if (_rigidbody.velocity.magnitude >= maxVelocity)
         {
-            // Si IsDiving => Clamp � maxvelocity * divingvelocitymodifier
-            // Si IsDiving == true last frame && IsDiving == false this frame, stoppeddiving = true => startcoroutine;
-
-            /*if(_lerpVelocityCoroutine == null && _stoppedDiving)
-            {
-                _lerpVelocityCoroutine = StartCoroutine(LerpVelocity(maxVelocity, _velocityLerpDuration));
-                _stoppedDiving = false;
-            }*/
-
             _rigidbody.velocity = _rigidbody.velocity.normalized * maxVelocity;
         }
     }
-
-    private IEnumerator LerpVelocity(float maxVelocity, float _velocityLerpDuration)
-    {
-        float clampTime = 0.0f;
-        float rate = 1.0f / _velocityLerpDuration;
-
-        while(clampTime < _velocityLerpDuration)
-        {
-            clampTime += Time.fixedDeltaTime * rate;
-
-            _rigidbody.velocity = Vector3.Lerp(_rigidbody.velocity, _rigidbody.velocity.normalized * maxVelocity, clampTime);
-
-            yield return null;
-        }
-
-        _lerpVelocityCoroutine = null;
-    }
-
-    // TakeDamage()
-
 }
