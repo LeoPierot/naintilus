@@ -2,10 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[ExecuteInEditMode]
 public class Spawner : MonoBehaviour
 {
-
+    private const int LEFT = 0, TOP = 1, RIGHT = 2, BOTTOM = 3; 
     public Camera cam;
     public Transform player;
     public float depthFromCam = .301f;
@@ -14,27 +13,34 @@ public class Spawner : MonoBehaviour
     public GameObject mainPrefab;
     public GameObject medusePrefab;
     public GameObject calmarPrefab;
+    public float baseTimeBetweenSpawn = 2.5f;
+    public AnimationCurve spawnSpeedCurve;
+    public float randomSpawnDelay;
+    public float levelDuration = 60;
+    private float countdown;
     private List<FrustumBorder> frustumBorders = new List<FrustumBorder>();
     public bool debug;
     public bool debuging;
     private Queue<FrustumBorder> _InactiveBorders = new Queue<FrustumBorder>();
     private List<FrustumBorder> _ActiveBorders = new List<FrustumBorder>();
-public float timeBetweenSpawn = 2;
+    private Rigidbody _PlayerRb;
+    public float timeBetweenSpawn {
+        get{
+            return (spawnSpeedCurve.Evaluate(countdown/levelDuration) * baseTimeBetweenSpawn) + 
+                    (spawnSpeedCurve.Evaluate(countdown/levelDuration) * Random.Range(-randomSpawnDelay, randomSpawnDelay));
+            }
+        }
     private void Start() {
         InitiateSpawner();
+        StartCoroutine(SpawnCoroutine());
     }
 
     public void Update()
     {
+        countdown += Time.deltaTime;
         Debug.DrawLine(transform.position, transform.forward * depthFromCam, Color.red);
         if(cam)
         {
-            if(debug)
-            {
-                debug = false;
-                StartCoroutine(DebugCoroutine());
-            }
-            //Debug.DrawLine(cam.ViewportToWorldPoint(new Vector3(.5f, .5f,depthFromCam)), spawnPos, Color.red);
             foreach(FrustumBorder border in frustumBorders)
             {
                 border.CheckSpawnedEnemies();
@@ -42,18 +48,20 @@ public float timeBetweenSpawn = 2;
         }
     }
 private Vector3 spawnPos;
-    private IEnumerator DebugCoroutine()
+    private IEnumerator SpawnCoroutine()
     {
-        debuging = true;
-        while(debuging)
+        while(countdown < levelDuration)
         {
-            SpawnRandomEnemy();
+            Debug.Log(timeBetweenSpawn);
             yield return new WaitForSeconds(timeBetweenSpawn);
+            SpawnRandomEnemy();
         }
     }
 
     private void InitiateSpawner()
     {
+        _PlayerRb = player.GetComponent<Rigidbody>();
+
         //stock frustum borders
         Vector3 bottomLeft = new Vector3(0, 0, depthFromCam);
         Vector3 topLeft = new Vector3(0, 1, depthFromCam);
@@ -103,21 +111,46 @@ private Vector3 spawnPos;
         _ActiveBorders.Add(bottom);
     }
 
+    int bottomSpeedSpawn = 0;
+    float _previousTimeBetweenSpawn = -1;
     public void SpawnRandomEnemy()
     {
         if(frustumBorders.Count == 0)
         {
             InitiateSpawner();
         }
-        int randIndex= Random.Range(0, _ActiveBorders.Count);
-        FrustumBorder randomBorder = _ActiveBorders[randIndex];
-        _ActiveBorders.Remove(randomBorder);
-        _InactiveBorders.Enqueue(randomBorder);
-        if(_InactiveBorders.Count > frustumBorders.Count/2)
+        FrustumBorder randomBorder;
+        if(Vector3.Dot(_PlayerRb.velocity, Vector3.down) > 0f && _PlayerRb.velocity.magnitude > 9)
         {
-            _ActiveBorders.Add(_InactiveBorders.Dequeue());
+            if(_previousTimeBetweenSpawn == -1)
+            {
+                _previousTimeBetweenSpawn = timeBetweenSpawn;
+                //timeBetweenSpawn /= 2;
+            }
+            randomBorder = frustumBorders[BOTTOM];
+            bottomSpeedSpawn++;
+            if(bottomSpeedSpawn > 4)
+            {
+                frustumBorders[TOP].Spawn(depthFromCam);
+                bottomSpeedSpawn = 0;
+            }
         }
-
+        else{
+            if(_previousTimeBetweenSpawn > -1)
+            {
+                //timeBetweenSpawn = _previousTimeBetweenSpawn;
+                _previousTimeBetweenSpawn = -1;
+            }
+            int randIndex= Random.Range(0, _ActiveBorders.Count);
+            randomBorder = _ActiveBorders[randIndex];
+            _ActiveBorders.Remove(randomBorder);
+            _InactiveBorders.Enqueue(randomBorder);
+            if(_InactiveBorders.Count > frustumBorders.Count/2)
+            {
+                _ActiveBorders.Add(_InactiveBorders.Dequeue());
+            }
+        }
+        
         randomBorder.Spawn(depthFromCam);
     }
 
