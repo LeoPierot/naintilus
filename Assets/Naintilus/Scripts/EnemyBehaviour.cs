@@ -6,6 +6,9 @@ public abstract class EnemyBehaviour : MonoBehaviour
     [SerializeField] protected Animator _explosionPrefab = default;
     [SerializeField] protected SpriteRenderer _renderer = default;
     [SerializeField] protected Collider _selfCollider = default;
+    [SerializeField] protected AudioSource audioSource = default;
+    [SerializeField] protected AudioClip chasingClip = default;
+    [SerializeField] protected AudioClip explosionClip = default;
     [SerializeField] protected Transform _target = default;
     [SerializeField] protected float _regularSpeed = 1.0f;
     [SerializeField] protected float _chaseSpeed = 2.0f;
@@ -54,6 +57,8 @@ public abstract class EnemyBehaviour : MonoBehaviour
 
     private IEnumerator DieCoroutine()
     {
+        audioSource.clip = explosionClip;
+        audioSource.Play();
         _renderer.enabled = false;
         _selfCollider.enabled = false;
         _explosionPrefab.SetBool("boom", true);
@@ -69,6 +74,12 @@ public abstract class EnemyBehaviour : MonoBehaviour
         }
 
         _forwardDirection = direction;
+    }
+
+    public virtual void PlayChase()
+    {
+        audioSource.clip = chasingClip;
+        audioSource.Play();
     }
 
     public virtual void Move(float speed)

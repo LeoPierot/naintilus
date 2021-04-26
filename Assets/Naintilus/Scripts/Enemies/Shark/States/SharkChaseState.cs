@@ -16,6 +16,7 @@ public class SharkChaseState : EnemyState<SharkBehaviour>
 
         _moveSpeed = _enemy.ChaseSpeed;
 
+        _enemy.PlayChase();
         if (_enemy.Target != null)
         {
             _enemy.SetDirection(_enemy.Target.position - _enemy.transform.position);

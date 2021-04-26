@@ -13,6 +13,9 @@ public class Player : MonoBehaviour
     [SerializeField] private Transform _armPivot = default;
     [SerializeField] private Transform _alternativeArmPivot = default;
     [Header("Movement Settings")]
+    [SerializeField] private AudioSource _audioSource = default;
+    [SerializeField] private AudioClip _bubbleClip = default;
+    [SerializeField] private AudioClip _dieClip = default;
     [SerializeField] private Animator _movementAnimator = default;
     [SerializeField] private float _bubblePushForce = 3.0f;
     [SerializeField] private float _defaultMaxVelocity = 3.5f;
@@ -78,6 +81,7 @@ public class Player : MonoBehaviour
         else if (Input.GetMouseButtonUp(0))
         {
             _bubbleVFX.SendEvent("StopMotion");
+            _audioSource.Stop();
             _isFiringBubbles = false;
         }
 
@@ -118,6 +122,8 @@ public class Player : MonoBehaviour
     {
         _state = PLAYER_STATE.GETTIN_SMASHED;
         _rigidbody.velocity = Vector3.zero;
+        _audioSource.clip = _dieClip;
+        _audioSource.Play();
         yield return new WaitForSeconds(.2f);
 
         _cam.GetComponent<PlayerCam>().enabled = false;
@@ -222,6 +228,11 @@ public class Player : MonoBehaviour
     private void FireBubble()
     {        
           _bubbleVFX.SendEvent("StartMotion");
+          if(!_audioSource.isPlaying)
+          {
+            _audioSource.clip = _bubbleClip;
+            _audioSource.Play();
+          }
     }
 
     private void FireTorpedo()
