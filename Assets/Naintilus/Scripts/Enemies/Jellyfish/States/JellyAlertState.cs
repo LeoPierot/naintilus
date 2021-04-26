@@ -14,9 +14,7 @@ public class JellyAlertState : EnemyState<JellyfishBehaviour>
     {
         base.Enter();
 
-        // play animation
-
-        Debug.Log("Enter Alert State");
+        _enemy.TriggerAlert();
 
         _reactionTime = _enemy.ReactionTime;
         _reactionEndTime = Time.time + _reactionTime;

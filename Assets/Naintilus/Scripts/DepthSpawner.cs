@@ -41,6 +41,7 @@ public class DepthSpawner : MonoBehaviour
 
     private void OnEnable()
     {
+        Player.OnPlayerDamage += ClearEnemies;
         Player.OnPlayerDeath += DisableSpawn;
 
         InitiateSpawner();
@@ -52,6 +53,7 @@ public class DepthSpawner : MonoBehaviour
 
     private void OnDisable()
     {
+        Player.OnPlayerDamage -= ClearEnemies;
         Player.OnPlayerDeath -= DisableSpawn;
 
         if (_spawnCoroutine != null)
@@ -72,6 +74,17 @@ public class DepthSpawner : MonoBehaviour
         }
     }
 
+    private void ClearEnemies(int garbageLife)
+    {
+        if (_cam != null)
+        {
+            foreach (FrustumBorder border in _frustrumBorders)
+            {
+                border.ClearSpawnedEnemies();
+            }
+        }
+    }
+
     private void DisableSpawn()
     {
         StopCoroutine(_spawnCoroutine);
@@ -82,7 +95,6 @@ public class DepthSpawner : MonoBehaviour
         while(_depthMonitor.ScaledCurrentDepth < _depthMonitor.MaxDepth)
         {
             yield return new WaitForSeconds(SpawnCooldown);
-            Debug.Log("Current depth % : " + _depthMonitor.ScaledCurrentDepth / _depthMonitor.MaxDepth);
             SpawnRandomEnemy();
         }
     }
@@ -251,6 +263,21 @@ public class DepthSpawner : MonoBehaviour
             {
                 _spawnedEnemies.Remove(item);
                 GameObject.Destroy(item.gameObject);
+            }
+        }
+
+        public void ClearSpawnedEnemies()
+        {
+            for(int i = _spawnedEnemies.Count-1; i>=0; i--)
+            {
+                if (_spawnedEnemies[i] != null)
+                {
+                    GameObject go = _spawnedEnemies[i].gameObject;
+                    _spawnedEnemies.RemoveAt(i);
+
+                    if (go != null)
+                        Destroy(go);
+                }
             }
         }
     }

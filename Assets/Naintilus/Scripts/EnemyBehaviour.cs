@@ -11,7 +11,8 @@ public abstract class EnemyBehaviour : MonoBehaviour
     [SerializeField] protected float _chaseSpeed = 2.0f;
     [SerializeField] protected float _reactionDistance = 2.0f;
     [SerializeField] protected float _reactionTime = .5f;
-
+    [SerializeField] protected GameObject _alertMarker = default;
+    [SerializeField] protected Vector3 _alertMarkerOffset = Vector3.up * 0.8f;
 
     protected Rigidbody _rigidbody;
     protected bool _hit;
@@ -78,5 +79,11 @@ public abstract class EnemyBehaviour : MonoBehaviour
     private void Flip()
     {
         transform.Rotate(transform.up, 180f);
+    }
+
+    public void TriggerAlert()
+    {
+        GameObject alertMarker = Instantiate(_alertMarker, transform.position + _alertMarkerOffset, Quaternion.identity);
+        Destroy(alertMarker, 0.3f);
     }
 }

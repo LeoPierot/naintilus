@@ -236,7 +236,7 @@ BoxCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 3.6118488, y: 1.3816963, z: 1}
-  m_Center: {x: 0.33569843, y: -0.011500642, z: -0.07}
+  m_Center: {x: 0.33569843, y: -0.011500642, z: 0}
 --- !u!114 &5312758554414852850
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -256,4 +256,6 @@ MonoBehaviour:
   _regularSpeed: 0.8
   _chaseSpeed: 1.8
   _reactionDistance: 5
-  _reactionTime: 0.75
+  _reactionTime: 1.1
+  _alertMarker: {fileID: 2858352918270727429, guid: 53a33c361c243284491c8e4aea5e9fed, type: 3}
+  _alertMarkerOffset: {x: 0, y: 1.2, z: 0}

@@ -152,7 +152,7 @@ MonoBehaviour:
   _selfCollider: {fileID: 4864474897320257723}
   _target: {fileID: 0}
   _regularSpeed: 0.2
-  _chaseSpeed: 2
+  _chaseSpeed: 1.8
   _reactionDistance: 6
   _reactionTime: 0.15
 --- !u!1 &7479768088085649103
