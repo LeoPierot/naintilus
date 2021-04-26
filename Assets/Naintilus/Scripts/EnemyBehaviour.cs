@@ -1,7 +1,11 @@
 using UnityEngine;
+using System.Collections;
 
 public abstract class EnemyBehaviour : MonoBehaviour
 {
+    [SerializeField] protected Animator _explosionPrefab = default;
+    [SerializeField] protected SpriteRenderer _renderer = default;
+    [SerializeField] protected Collider _selfCollider = default;
     [SerializeField] protected Transform _target = default;
     [SerializeField] protected float _regularSpeed = 1.0f;
     [SerializeField] protected float _chaseSpeed = 2.0f;
@@ -38,13 +42,22 @@ public abstract class EnemyBehaviour : MonoBehaviour
             _rigidbody.velocity = Vector3.zero;
             Vector3 smashDirection = _target.position - transform.position;
             other.GetComponent<Player>().TakeDamage(smashDirection);
-            Destroy(gameObject); // TODO : Add SFX + VFX
+            StartCoroutine(DieCoroutine());
         }
         else if(other.CompareTag("Torpedo"))
         {
             Destroy(other.gameObject);
-            Destroy(gameObject); // TODO : Add SFX + VFX
+            StartCoroutine(DieCoroutine());
         }
+    }
+
+    private IEnumerator DieCoroutine()
+    {
+        _renderer.enabled = false;
+        _selfCollider.enabled = false;
+        _explosionPrefab.SetBool("boom", true);
+        yield return new WaitForSeconds(1);
+        Destroy(gameObject);
     }
 
     public virtual void SetDirection(Vector3 direction) 

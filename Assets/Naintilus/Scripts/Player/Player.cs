@@ -13,6 +13,7 @@ public class Player : MonoBehaviour
     [SerializeField] private Transform _armPivot = default;
     [SerializeField] private Transform _alternativeArmPivot = default;
     [Header("Movement Settings")]
+    [SerializeField] private Animator _movementAnimator = default;
     [SerializeField] private float _bubblePushForce = 3.0f;
     [SerializeField] private float _defaultMaxVelocity = 3.5f;
     [SerializeField] private float _divingVelocityModifier = 2.0f;
@@ -184,9 +185,32 @@ public class Player : MonoBehaviour
         if(Vector3.Dot(mouseDirection.normalized, Vector3.right)>0)
         {
             _alternativeArmPivot.localEulerAngles = new Vector3(0, 0, 0);
+            if(_isFiringBubbles)
+            {
+                _movementAnimator.SetBool("Idle", false);
+                _movementAnimator.SetBool("GoRight", false);
+                _movementAnimator.SetBool("GoLeft", true);
+            }
+            else{
+                _movementAnimator.SetBool("GoLeft", false);
+                _movementAnimator.SetBool("GoRight", false);
+                _movementAnimator.SetBool("Idle", true);
+            }
+            
         }
         else{
             _alternativeArmPivot.localEulerAngles = new Vector3(180, 0, 0); 
+            if(_isFiringBubbles)
+            {
+                _movementAnimator.SetBool("Idle", false);
+                _movementAnimator.SetBool("GoLeft", false);
+                _movementAnimator.SetBool("GoRight", true);
+            }
+            else{
+                _movementAnimator.SetBool("GoRight", false);
+                _movementAnimator.SetBool("GoLeft", false);
+                _movementAnimator.SetBool("Idle", true);
+            }
         }
         _armPivot.right = mouseDirection;
 
