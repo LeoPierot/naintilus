@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 2450357271563251237}
   m_Layer: 0
   m_Name: Torpedo
-  m_TagString: Untagged
+  m_TagString: Torpedo
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -96,7 +96,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 3.896048, y: 1.666913, z: 0.2}
+  m_Size: {x: 3.896048, y: 1.666913, z: 1}
   m_Center: {x: 1.924713, y: -0.07680038, z: 0}
 --- !u!54 &1195332452237861007
 Rigidbody:

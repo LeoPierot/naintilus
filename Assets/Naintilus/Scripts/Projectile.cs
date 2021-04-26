@@ -30,4 +30,17 @@ public class Projectile : MonoBehaviour
     {
         _forward = direction;
     }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("StartButton"))
+        {
+            other.gameObject.GetComponent<StartButton>().StartGame();
+        }
+
+        if (!other.CompareTag("Player"))
+        {
+            Destroy(gameObject);
+        }
+    }
 }

@@ -685,7 +685,7 @@ Transform:
   - {fileID: 8965064339898706754}
   - {fileID: 7844620142896199328}
   m_Father: {fileID: 8808125569865970547}
-  m_RootOrder: 0
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &6912456985618273876
 Animator:
@@ -1671,6 +1671,99 @@ Transform:
   m_Father: {fileID: 6395195806984387953}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: -1.9727366, y: 0.0000006087317, z: -0.00000031451412}
+--- !u!1 &6340360896725560642
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5228963933359967754}
+  - component: {fileID: 244405054978949257}
+  m_Layer: 8
+  m_Name: Point Light
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5228963933359967754
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6340360896725560642}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -2.22}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 8808125569865970547}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!108 &244405054978949257
+Light:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6340360896725560642}
+  m_Enabled: 1
+  serializedVersion: 10
+  m_Type: 2
+  m_Shape: 0
+  m_Color: {r: 0.6650944, g: 0.9565863, b: 1, a: 1}
+  m_Intensity: 0.01
+  m_Range: 8
+  m_SpotAngle: 30
+  m_InnerSpotAngle: 21.80208
+  m_CookieSize: 10
+  m_Shadows:
+    m_Type: 0
+    m_Resolution: -1
+    m_CustomResolution: -1
+    m_Strength: 1
+    m_Bias: 0.02
+    m_NormalBias: 0.1
+    m_NearPlane: 0.1
+    m_CullingMatrixOverride:
+      e00: 1
+      e01: 0
+      e02: 0
+      e03: 0
+      e10: 0
+      e11: 1
+      e12: 0
+      e13: 0
+      e20: 0
+      e21: 0
+      e22: 1
+      e23: 0
+      e30: 0
+      e31: 0
+      e32: 0
+      e33: 1
+    m_UseCullingMatrixOverride: 0
+  m_Cookie: {fileID: 0}
+  m_DrawHalo: 0
+  m_Flare: {fileID: 0}
+  m_RenderMode: 0
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_RenderingLayerMask: 1
+  m_Lightmapping: 4
+  m_LightShadowCasterMode: 0
+  m_AreaSize: {x: 1, y: 1}
+  m_BounceIntensity: 0
+  m_ColorTemperature: 6570
+  m_UseColorTemperature: 0
+  m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
+  m_UseBoundingSphereOverride: 0
+  m_UseViewFrustumForShadowCasterCull: 1
+  m_ShadowRadius: 0
+  m_ShadowAngle: 0
 --- !u!1 &6405778898692002325
 GameObject:
   m_ObjectHideFlags: 0
@@ -2345,7 +2438,7 @@ Transform:
   - {fileID: 8808125570161990442}
   - {fileID: 4609994363149037653}
   m_Father: {fileID: 8808125569865970547}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8808125569865970550
 GameObject:
@@ -2377,9 +2470,10 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 1634162586949380545}
   - {fileID: 8808125569237941368}
   - {fileID: 626748178508824551}
+  - {fileID: 5228963933359967754}
+  - {fileID: 1634162586949380545}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2417,7 +2511,10 @@ MonoBehaviour:
   _bubblePushForce: 3
   _defaultMaxVelocity: 3.5
   _divingVelocityModifier: 2
+  _isConstrainedOnX: 1
   _maxHorizontalDelta: 8
+  _isConstrainedOnY: 0
+  _maxVerticalDelta: 8.5
   _crossHairCursor: {fileID: 0}
   _canonOrigin: {fileID: 0}
   _bubbleVFX: {fileID: 0}
@@ -2543,7 +2640,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2042872826464446415, guid: a513dd7e691854c47adfef22e0d369b8, type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2042872826464446415, guid: a513dd7e691854c47adfef22e0d369b8, type: 3}
       propertyPath: m_LocalPosition.x

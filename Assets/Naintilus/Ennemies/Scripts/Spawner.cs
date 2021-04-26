@@ -5,6 +5,7 @@ using UnityEngine;
 public class Spawner : MonoBehaviour
 {
     private const int LEFT = 0, TOP = 1, RIGHT = 2, BOTTOM = 3; 
+
     public Camera cam;
     public Transform player;
     public float depthFromCam = .301f;
@@ -17,6 +18,7 @@ public class Spawner : MonoBehaviour
     public AnimationCurve spawnSpeedCurve;
     public float randomSpawnDelay;
     public float levelDuration = 60;
+
     private float countdown;
     private List<FrustumBorder> frustumBorders = new List<FrustumBorder>();
     private Queue<FrustumBorder> _InactiveBorders = new Queue<FrustumBorder>();

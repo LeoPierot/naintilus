@@ -6,9 +6,6 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 public class Player : MonoBehaviour
 {
-    // nombre de vies max
-    // nombre de vies actuel
-    // dur�e de l'invincibilit�
     private enum PLAYER_STATE{FINE, GETTIN_SMASHED}
 
     [Header("External Components")]
@@ -19,7 +16,10 @@ public class Player : MonoBehaviour
     [SerializeField] private float _bubblePushForce = 3.0f;
     [SerializeField] private float _defaultMaxVelocity = 3.5f;
     [SerializeField] private float _divingVelocityModifier = 2.0f;
+    [SerializeField] private bool _isConstrainedOnX = true;
     [SerializeField] private float _maxHorizontalDelta = 8.5f;
+    [SerializeField] private bool _isConstrainedOnY = false;
+    [SerializeField] private float _maxVerticalDelta = 8.5f;
     [Header("BubbleGun Settings")]
     [SerializeField] private Texture2D _crossHairCursor = default;
     [SerializeField] private Transform _canonOrigin = default;
@@ -35,6 +35,7 @@ public class Player : MonoBehaviour
 
     private Rigidbody _rigidbody;
 
+    private int _currentLife = 3;
     private bool _isFiringBubbles = false;
     private float _nextBubbleTime = 0.0f;
     private float _nextTorpedoTime = 0.0f;
@@ -44,6 +45,9 @@ public class Player : MonoBehaviour
     private PLAYER_STATE _state;
 
     private Vector3 FiringDirection => new Vector3(_armPivot.right.x, _armPivot.right.y, 0.0f);
+
+    public static event System.Action<int> OnPlayerDamage;
+    public static event System.Action OnPlayerDeath;
 
     private void Awake()
     {
@@ -103,7 +107,9 @@ public class Player : MonoBehaviour
 
     
     public void TakeDamage(Vector3 force){
-        //take dmg
+
+        _currentLife--;
+        OnPlayerDamage.Invoke(_currentLife);
         StartCoroutine(GETSMASHED(force));
     }
 
@@ -118,7 +124,14 @@ public class Player : MonoBehaviour
         yield return LerpPosition(transform.position, transform.position + force * 20, .75f);
         yield return new WaitForSeconds(1f);
 
-        yield return Respawn();
+        if (_currentLife > 0)
+        {
+            yield return Respawn();
+        }
+        else
+        {
+            OnPlayerDeath.Invoke();
+        }
     }
 
     private IEnumerator LerpPosition(Vector3 start, Vector3 end, float time)
@@ -210,13 +223,22 @@ public class Player : MonoBehaviour
 
     private void ApplyBounds()
     {
-        if(_maxHorizontalDelta - Mathf.Abs(transform.position.x) <= 0.1f && Mathf.Sign(_rigidbody.velocity.x) == Mathf.Sign(transform.position.x))
+        if(_isConstrainedOnX && _maxHorizontalDelta - Mathf.Abs(transform.position.x) <= 0.1f && Mathf.Sign(_rigidbody.velocity.x) == Mathf.Sign(transform.position.x))
         {
             var oppositeForceDir = new Vector3(-_rigidbody.velocity.x, 0.0f, 0.0f);
             oppositeForceDir.Normalize();
 
             _rigidbody.AddForce(oppositeForceDir * _bubblePushForce * 4f);
         }
+
+        if(_isConstrainedOnY && _maxVerticalDelta - Mathf.Abs(transform.position.y) <= 0.1f && Mathf.Sign(_rigidbody.velocity.y) == Mathf.Sign(transform.position.y))
+        {
+            var oppositeForceDir = new Vector3(0.0f, -_rigidbody.velocity.y, 0.0f);
+            oppositeForceDir.Normalize();
+
+            _rigidbody.AddForce(oppositeForceDir * _bubblePushForce * 4f);
+        }
+
     }
 
     private void ClampVelocity(float maxVelocity)

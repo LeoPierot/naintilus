@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/SampleScene.unity
-    guid: d1c3109bdb54ad54c8a2b2838528e640
+    path: Assets/Naintilus/Scenes/MainMenu.unity
+    guid: 3e97213ff6717474498cdc112ef9c9ce
+  - enabled: 1
+    path: Assets/Naintilus/Scenes/PlayerControlTestScene.unity
+    guid: e28c59dda541f8f4f9cb1038a0edaada
   m_configObjects: {}
